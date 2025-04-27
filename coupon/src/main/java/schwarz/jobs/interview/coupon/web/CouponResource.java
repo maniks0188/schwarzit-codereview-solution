@@ -4,6 +4,8 @@ package schwarz.jobs.interview.coupon.web;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import schwarz.jobs.interview.coupon.core.domain.Coupon;
@@ -97,7 +98,7 @@ public class CouponResource {
         	return ResponseEntity.ok(couponDTO);
         }else {
         	log.info(Constants.COUPON_CREATE_FAIL);
-        	return ResponseEntity.internalServerError().build();
+        	return ResponseEntity.notFound().build();
         }
         
     }

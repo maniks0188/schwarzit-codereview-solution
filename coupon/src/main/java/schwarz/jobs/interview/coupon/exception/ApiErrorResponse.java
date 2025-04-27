@@ -3,6 +3,9 @@ package schwarz.jobs.interview.coupon.exception;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * Represents an error response returned in case of API errors.
  * <p>
@@ -17,10 +20,12 @@ import java.util.List;
  * @param messages  A list of detailed error messages, such as validation failures or other issues.
  * @param path      The path of the request that triggered the error.
  */
-public record ApiErrorResponse(LocalDateTime timestamp, int status, String error, List<String> messages,
-                               String path) {
-
-  public ApiErrorResponse(int status, String error, List<String> messages, String path) {
-    this(LocalDateTime.now(), status, error, messages, path);
-  }
+@Data
+@AllArgsConstructor
+public class ApiErrorResponse{
+	int status; 
+	String error; 
+	List<String> messages;
+	String path;
 }
+                               

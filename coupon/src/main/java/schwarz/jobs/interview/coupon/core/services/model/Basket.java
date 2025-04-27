@@ -2,7 +2,8 @@ package schwarz.jobs.interview.coupon.core.services.model;
 
 import java.math.BigDecimal;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
+
 import lombok.Builder;
 import lombok.Data;
 

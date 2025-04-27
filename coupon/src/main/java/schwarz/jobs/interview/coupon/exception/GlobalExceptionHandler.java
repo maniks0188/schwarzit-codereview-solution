@@ -2,15 +2,15 @@ package schwarz.jobs.interview.coupon.exception;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.servlet.http.HttpServletRequest;
 import schwarz.jobs.interview.coupon.util.Constants;
 
 /**
@@ -59,27 +59,6 @@ public class GlobalExceptionHandler {
 		 * request.getRequestURI()); return
 		 * ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse); }
 		 */
-
-	  /**
-	   * Handles validation errors (MethodArgumentNotValidException) and returns a structured error response.
-	   *
-	   * @param ex      The thrown `MethodArgumentNotValidException`.
-	   * @param request The HTTP request that caused the exception.
-	   * @return A `ResponseEntity` containing the `ApiErrorResponse` with validation error details.
-	   */
-	  @ExceptionHandler(MethodArgumentNotValidException.class)
-	  public ResponseEntity<ApiErrorResponse> handleValidationExceptions(
-	      MethodArgumentNotValidException ex, HttpServletRequest request) {
-	    List<String> messages = ex.getBindingResult()
-	        .getFieldErrors()
-	        .stream()
-	        .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-	        .toList();
-	    logger.error("Validation error occurred: {}", messages);
-	    ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(),
-	    		Constants.VALIDATION_ERROR, messages, request.getRequestURI());
-	    return ResponseEntity.badRequest().body(errorResponse);
-	  }
 
 	  /**
 	   * Handles `IllegalArgumentException` and returns a formatted error response.
