@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -111,40 +111,19 @@ public class CouponResource {
      * 
      * @return a {@link ResponseEntity} containing the list of coupons {@link CouponDTO}
      */
-    @ApiOperation(value = "Gets all Coupons from the server")
+    @ApiOperation(value = "Gets the Coupons from the server")
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successfully fetched all the coupons", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CouponDTO.class))),
       @ApiResponse(responseCode = "404", description = "No data found", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json"))})
     @GetMapping(value = Constants.PATH_SEPARATOR + Constants.ENDPOINT_COUPONS)
-    public ResponseEntity<List<CouponDTO>> getCoupons() {
+    public ResponseEntity<List<CouponDTO>> getCoupons(@RequestParam List<String> couponCodes) {
     	log.info("Get all coupons!");
-    	List<CouponDTO> lst = couponService.getCoupons();
+    	List<CouponDTO> lst = couponService.getCoupons(couponCodes);
     	if(!lst.isEmpty()) {
     		return ResponseEntity.ok(lst);
     	}else {
     		return ResponseEntity.noContent().build();
-    	}
-        
-    }
-    
-    /**
-     * @param pass coupon code as path param
-     * @return a {@link ResponseEntity} containing the coupon {@link CouponDTO}
-     */
-    @ApiOperation(value = "Gets the Coupon from the server")
-    @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successfully fetched the coupon", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CouponDTO.class))),
-      @ApiResponse(responseCode = "404", description = "No data found", content = @Content(mediaType = "application/json")),
-      @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json"))})
-    @GetMapping(value = Constants.PATH_SEPARATOR + Constants.ENDPOINT_COUPON + Constants.PATH_SEPARATOR + "{code}")
-    public ResponseEntity<CouponDTO> getCoupon(@PathVariable(value = "code") String couponCode) {
-    	log.info("Get coupon for code - ", couponCode);
-    	CouponDTO coupon = couponService.findCouponByCode(couponCode);
-    	if(coupon!=null) {
-    		return ResponseEntity.ok(coupon);
-    	}else {
-    		return ResponseEntity.notFound().build();
     	}
         
     }

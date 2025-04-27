@@ -19,7 +19,6 @@ public interface ICouponService {
 	 
 	 public Coupon createCoupon(final CouponDTO couponDTO);
 	 
-	 public List<CouponDTO> getCoupons();
+	 public List<CouponDTO> getCoupons(List<String> couponCodes);
 	 
-	 public CouponDTO findCouponByCode(String couponCode);
 }

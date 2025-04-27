@@ -1,5 +1,7 @@
 package schwarz.jobs.interview.coupon.core.services;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,10 +14,8 @@ import lombok.RequiredArgsConstructor;
 import schwarz.jobs.interview.coupon.core.domain.Coupon;
 import schwarz.jobs.interview.coupon.core.repository.CouponRepository;
 import schwarz.jobs.interview.coupon.core.services.model.Basket;
-import schwarz.jobs.interview.coupon.exception.CouponNotFoundException;
 import schwarz.jobs.interview.coupon.exception.InvalidBasketException;
 import schwarz.jobs.interview.coupon.util.Constants;
-import schwarz.jobs.interview.coupon.util.MapperUtil;
 import schwarz.jobs.interview.coupon.web.dto.CouponDTO;
 
 /**
@@ -32,8 +32,6 @@ public class CouponService implements ICouponService{
 
     private final CouponRepository couponRepository;
     
-    private final MapperUtil util;
-
     /**
      * Finds the coupon object by code
      * 
@@ -60,11 +58,10 @@ public class CouponService implements ICouponService{
     public Optional<Basket> apply(final Basket basket, final String code) {
 
     	return getCoupon(code).map(coupon -> {
-    		double basketValue = basket.getValue().doubleValue();
-    		if(basketValue < 0) {
+    		if(basket.getValue().compareTo(BigDecimal.ZERO) < 0) {
     			log.error(Constants.INVALID_BASKET_VALUE);
     			throw new InvalidBasketException(Constants.INVALID_BASKET_VALUE);
-    		}else if(basketValue > 0) {
+    		}else if(basket.getValue().compareTo(BigDecimal.ZERO) > 0) {
     			log.info(Constants.COUPON_APPLIED_SUCCESS);
     			basket.applyDiscount(coupon.getDiscount());
     		}
@@ -137,41 +134,18 @@ public class CouponService implements ICouponService{
     	}
     	
     }
-	/*
-	 * public List<Coupon> getCoupons(final CouponRequestDTO couponRequestDTO) {
-	 * 
-	 * final ArrayList<Coupon> foundCoupons = new ArrayList<>();
-	 * 
-	 * couponRequestDTO.getCodes().forEach(code ->
-	 * foundCoupons.add(couponRepository.findByCode(code).get()));
-	 * 
-	 * return foundCoupons; }
-	 */
-
+	
     /**
-     * This method returns all the coupons from the database
-     * 
+     * This method returns the coupons based on codes from the database
+     * @param List of coupon codes
      * @return {@link Optional of CouponDTO}
      */
-    public List<CouponDTO> getCoupons() {
-    	log.info("Calling get all coupons!");
-    	List<Coupon> dbList = couponRepository.findAll();
-    	return dbList.stream().map(coupon -> new CouponDTO(coupon.getDiscount(), coupon.getCode(), coupon.getMinBasketValue())).collect(Collectors.toList());
-    }
-    
-    /**
-     * This method returns the coupon based on code from the database
-     * @param String couponCode
-     * @return {@link Optional of CouponDTO}
-     */
-    public CouponDTO findCouponByCode(String couponCode) {
+	public List<CouponDTO> getCoupons(List<String> couponCodes) {
 
-    	log.info("Calling getCoupon using code!");
-    	Optional<Coupon> coupon = getCoupon(couponCode);
-    	if(coupon.isPresent()) {
-    		return util.convertToDto(coupon.get());
-    	}
-    	log.info("No coupon found for code {}!", couponCode);
-    	throw new CouponNotFoundException(Constants.INVALID_COUPON);
-    }
+		final ArrayList<Coupon> foundCoupons = new ArrayList<>();
+		couponCodes.forEach(code -> couponRepository.findByCode(code).ifPresent(foundCoupons::add));
+		return foundCoupons.stream().map(coupon -> new CouponDTO(coupon.getDiscount(), coupon.getCode(), coupon.getMinBasketValue())).collect(Collectors.toList());
+		
+	} 
+
 }
