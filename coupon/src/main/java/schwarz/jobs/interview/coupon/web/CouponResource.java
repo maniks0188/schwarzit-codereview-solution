@@ -55,7 +55,7 @@ public class CouponResource {
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successfully updated the basket", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Basket.class))),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content(mediaType = "application/json"))})
-    @PostMapping(value = Constants.PATH_SEPARATOR + Constants.ENDPOINT_APPLY)
+    @PostMapping(value = Constants.PATH_SEPARATOR + Constants.VERSION + Constants.PATH_SEPARATOR + Constants.ENDPOINT_APPLY)
     public ResponseEntity<Basket> apply(
         @RequestBody @Valid final ApplicationRequestDTO applicationRequestDTO) {
 
@@ -89,7 +89,7 @@ public class CouponResource {
       @ApiResponse(responseCode = "200", description = "Successfully created the coupon", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Basket.class))),
       @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json"))})
-    @PostMapping(value = Constants.PATH_SEPARATOR + Constants.ENDPOINT_CREATE)
+    @PostMapping(value = Constants.PATH_SEPARATOR + Constants.VERSION + Constants.PATH_SEPARATOR + Constants.ENDPOINT_CREATE)
     public ResponseEntity<CouponDTO> create(@RequestBody @Valid final CouponDTO couponDTO) {
     	log.info("Inside creating coupon!");
         final Coupon coupon = couponService.createCoupon(couponDTO);
@@ -117,7 +117,7 @@ public class CouponResource {
       @ApiResponse(responseCode = "200", description = "Successfully fetched all the coupons", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CouponDTO.class))),
       @ApiResponse(responseCode = "404", description = "No data found", content = @Content(mediaType = "application/json")),
       @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json"))})
-    @GetMapping(value = Constants.PATH_SEPARATOR + Constants.ENDPOINT_COUPONS)
+    @GetMapping(value = Constants.PATH_SEPARATOR + Constants.VERSION + Constants.PATH_SEPARATOR + Constants.ENDPOINT_COUPONS)
     public ResponseEntity<List<CouponDTO>> getCoupons(@RequestParam List<String> couponCodes) {
     	log.info("Get all coupons!");
     	List<CouponDTO> lst = couponService.getCoupons(couponCodes);

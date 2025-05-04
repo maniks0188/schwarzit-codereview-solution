@@ -143,7 +143,7 @@ public class CouponService implements ICouponService{
 	public List<CouponDTO> getCoupons(List<String> couponCodes) {
 
 		final ArrayList<Coupon> foundCoupons = new ArrayList<>();
-		couponCodes.forEach(code -> couponRepository.findByCode(code).ifPresent(foundCoupons::add));
+		couponCodes.forEach(code -> getCoupon(code.toLowerCase()).ifPresent(foundCoupons::add));
 		return foundCoupons.stream().map(coupon -> new CouponDTO(coupon.getDiscount(), coupon.getCode(), coupon.getMinBasketValue())).collect(Collectors.toList());
 		
 	} 
