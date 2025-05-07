@@ -55,7 +55,7 @@ http://localhost:8080
 
 ## **Endpoints**
 
-### **POST /api/apply**
+### **POST /api/v1/apply**
 **Description**: Applies the coupon code to the basket
 
 **Request Body**:
@@ -67,7 +67,7 @@ http://localhost:8080
     }
 }
 ```
-### **POST /api/create**
+### **POST /api/v1/create**
 **Description**: Creates a new coupon in the database
 
 **Request Body**:
@@ -78,7 +78,7 @@ http://localhost:8080
     "minBasketValue":5000.50
 }
 ```
-### **GET /api/coupons?couponCodes={list of codes}**
+### **GET /api/v1/coupons?couponCodes={list of codes}**
 **Description**: Gets all the coupons based on code from the database
 
 **Response body**:
