@@ -73,6 +73,22 @@ public class CouponResourceTest {
 	}
 	
 	@Test
+	void test_invalid_input_apply() {
+		Basket basket = Basket.builder()
+		        .value(BigDecimal.TEN)
+		        .applicationSuccessful(false)
+		        .build();
+		ApplicationRequestDTO request = new ApplicationRequestDTO("1234", basket);
+		
+		when(couponService.apply(basket, request.getCode())).thenReturn(Optional.of(basket));
+		
+		ResponseEntity<Basket> response = controller.apply(request);
+		
+		assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
+		
+	}
+	
+	@Test
 	void test_getCoupons() {
 		List<String> codes = Arrays.asList("1234");
 		
